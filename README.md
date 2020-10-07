@@ -2,7 +2,7 @@
 
 Miscellaneous scripts for working with IDyOM (Information Dynamics of Music): https://github.com/Music-Cognition-Lab/idyom
 
-**Disclaimer: we cannot promise these scripts are all well-maintained and widely supported, use at your own risk! **
+**Disclaimer: we cannot promise these scripts are all well-maintained and widely supported, use at your own risk!**
 
 ---
 
