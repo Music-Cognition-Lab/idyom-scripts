@@ -20,7 +20,7 @@ MIDC_DEFAULT = '60'
 
 def to_lisp(x):
     # Credit: https://stackoverflow.com/a/14059322/6334309
-    return '(%s)' % ' '.join(to_lisp(y) for y in x) if isinstance(x, list) else x
+    return '(%s)\n' % ' '.join(to_lisp(y) for y in x) if isinstance(x, list) else x
 
 def lisp_to_list(lisp_str,label=None):
     return pyparsing.nestedExpr('(', ')').parseString(lisp_str).asList()
@@ -84,8 +84,8 @@ def main(args):
                     # End of phrase, reset
                     event[ons_ind][1] = str(int(event[ons_ind][1])-onset_offset)
                     curr_phrase.append(event)
-                    ext = '_{}'.format(n_segs)
-                    phrases.append([mel_name+ext]+curr_phrase[:])
+                    mel_name_ext = '"{}_{}"'.format(mel_name, n_segs)
+                    phrases.append([mel_name_ext]+curr_phrase[:])
                     n_segs += 1
                     curr_phrase = []
                 elif val == '1':
@@ -99,7 +99,7 @@ def main(args):
                     event[ons_ind][1] = str(int(event[ons_ind][1])-onset_offset)
                     curr_phrase.append(event)
 
-    new_data = [[args.newname, TIMEBASE_DEFAULT, MIDC_DEFAULT, phrases]]
+    new_data = ['"'+args.newname+'"', TIMEBASE_DEFAULT, MIDC_DEFAULT, phrases]
     out_path = '{}.lisp'.format(args.newname)
     print('Writing to {}: {}'.format(len(phrases), out_path))
     with open(out_path, 'w') as outfile:
