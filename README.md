@@ -10,8 +10,8 @@ Python scripts (tested on v3.8.1):
 
 - `checkbioi.py` : utility to identify cases where BIOIs (basic inter onset intervals) derived by IDyOM are not equal to the difference in ONSET between successive events - this can cause model errors.
 - `exportdb.py` : class that exports IDyOM's database as a Pandas `DataFrame`.
-- `checktimebase.py` : utility to parse a directory of Humdrum `.krn` files and return lowest possible
-timebase value for importing into IDyOM database.
+- `checktimebase.py` : utility to parse a directory of Humdrum `.krn` files and return lowest possible vtimebase value for importing into IDyOM database.
+- `segment_lisp_corpora.py`: extract segments/phrases from IDyOM-exported corpora (LISP-format) and create a new corpus (LISP-format) where each segment/phrase is an individual melody.
 
 Lisp scripts (note that you may need to run `(clsql:enable-sql-reader-syntax)` to allow `clsql` syntax):
 
