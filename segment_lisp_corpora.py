@@ -25,9 +25,9 @@ def to_lisp(x):
 def lisp_to_list(lisp_str,label=None):
     return pyparsing.nestedExpr('(', ')').parseString(lisp_str).asList()
 
-def phrase_value(event):
+def tag_value(event, label):
     for tag, val in event:
-        if tag == ':PHRASE':
+        if tag == label:
             return val
 
 def onset_value_ind(event):
@@ -75,7 +75,7 @@ def main(args):
             for j in range(1, n_events):
                 event = data[0][i][j]
                 # Use :PHRASE to check boundaries of segment
-                val = phrase_value(event)
+                val = tag_value(event, ':PHRASE')
                 # Adjust :ONSET to start from 0 within segment
                 ons, ons_ind = onset_value_ind(event)
 
@@ -90,8 +90,9 @@ def main(args):
                     curr_phrase = []
                 elif val == '1':
                     # Start of phrase, reset
-                    onset_offset = int(ons)
-                    event[ons_ind][1] = '0'
+                    bioi = int(tag_value(event, ':BIOI'))
+                    onset_offset = int(ons)-bioi
+                    event[ons_ind][1] = str(bioi)
                     curr_phrase = [event]
                 elif val == '0' and len(curr_phrase) > 0:
                     # Only add to phrase if we explicitly know a phrase
@@ -99,7 +100,7 @@ def main(args):
                     event[ons_ind][1] = str(int(event[ons_ind][1])-onset_offset)
                     curr_phrase.append(event)
 
-    new_data = ['"'+args.newname+'"', TIMEBASE_DEFAULT, MIDC_DEFAULT, phrases]
+    new_data = ['"'+args.newname+'"', TIMEBASE_DEFAULT, MIDC_DEFAULT, *phrases]
     out_path = '{}.lisp'.format(args.newname)
     print('Writing to {}: {}'.format(len(phrases), out_path))
     with open(out_path, 'w') as outfile:
